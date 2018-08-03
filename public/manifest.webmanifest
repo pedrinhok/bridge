@@ -1,0 +1,13 @@
+{
+  "name": "bridge",
+  "short_name": "bridge",
+  "description": "O app para sua partida de bridge",
+  "icons": [{
+    "src": "icon/bridge.svg",
+    "sizes": "48x48 72x72 96x96 144x144 168x168 192x192 512x512"
+  }],
+  "start_url": ".",
+  "theme_color": "#FFF",
+  "background_color": "#FFF",
+  "display": "standalone"
+}

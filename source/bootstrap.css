@@ -1,0 +1,47 @@
+.btn-return, .btn-return > button {
+  width: 100%;
+}
+
+.division {
+  margin-top: 20px;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+}
+.list > div {
+  padding: 10px 0px;
+  border-top: 1px solid #CCC;
+  display: flex;
+  align-items: center;
+}
+.list > div:first-child {
+  border-top: none;
+}
+.list .list-user {
+  flex: 1 1 auto;
+}
+.list .list-action {
+  flex: 0 0 20%;
+  text-align: center;
+}
+.list .list-action input {
+  text-align: center;
+}
+.list .list-action input[type="checkbox"] {
+  display: initial;
+  width: auto;
+}
+
+.text-center input {
+  text-align: center;
+}
+
+@media (max-width: 575px) {
+
+  .list .list-action input[type="checkbox"] {
+    width: 100%;
+  }
+
+}
