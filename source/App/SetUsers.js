@@ -14,10 +14,11 @@ class SetUsers extends React.Component {
     } else {
       this.state = { users: [] }
     }
-  }
 
-  copy(data) {
-    return JSON.parse(JSON.stringify(data))
+    this.add = this.add.bind(this)
+    this.enter = this.enter.bind(this)
+    this.next = this.next.bind(this)
+    this.remove = this.remove.bind(this)
   }
 
   add() {
@@ -31,6 +32,19 @@ class SetUsers extends React.Component {
     this.setState({ users })
   }
 
+  copy(data) {
+    return JSON.parse(JSON.stringify(data))
+  }
+
+  enter(event) {
+    if (event.which === 27) {
+      this.reference.value = ""
+    }
+    if (event.which === 13) {
+      this.add()
+    }
+  }
+
   next() {
     const users = this.state.users.map((user, key) => ({ key, name: user, score: 0 }))
 
@@ -39,9 +53,15 @@ class SetUsers extends React.Component {
     this.props.return(users)
   }
 
-  render() {
-    const { users } = this.state
+  remove(key) {
+    const users = this.state.users.map((user) => user)
 
+    users.splice(key, 1)
+
+    this.setState({ users })
+  }
+
+  render() {
     return (
       <Wrapper>
         <div className="division text-center">
@@ -49,18 +69,29 @@ class SetUsers extends React.Component {
         </div>
         <div className="division">
           <div className="input-group">
-            <input type="text" className="form-control" ref={(element) => this.reference = element} />
+            <input type="text" className="form-control" ref={(element) => this.reference = element} onKeyUp={this.enter} />
             <div className="input-group-append">
-              <button type="button" className="btn btn-outline-secondary" onClick={this.add.bind(this)}>OK</button>
+              <button type="button" className="btn btn-outline-secondary" onClick={this.add}>OK</button>
             </div>
           </div>
           <div className="list">
-            {users.map((user, key) => <div key={key}>{user}</div>)}
+            {this.state.users.map((user, key) => (
+
+              <div key={key}>
+                <span className="list-user">
+                  {user}
+                </span>
+                <span className="list-action">
+                  <button type="button" onClick={() => this.remove(key)}>&times;</button>
+                </span>
+              </div>
+
+            ))}
           </div>
         </div>
         <div className="division btn-group btn-return">
           <button type="button" className="btn btn-outline-secondary" onClick={this.props.undo}>Retornar</button>
-          <button type="button" className="btn btn-secondary" onClick={this.next.bind(this)}>OK</button>
+          <button type="button" className="btn btn-secondary" onClick={this.next}>OK</button>
         </div>
       </Wrapper>
     )

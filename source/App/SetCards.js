@@ -8,6 +8,8 @@ class SetCards extends React.Component {
     super(props)
 
     this.state = { cards: Math.round(52 / props.users.length) }
+
+    this.next = this.next.bind(this)
   }
 
   next() {
@@ -27,7 +29,7 @@ class SetCards extends React.Component {
         </div>
         <div className="division btn-group btn-return">
           <button type="button" className="btn btn-outline-secondary" onClick={this.props.undo}>Retornar</button>
-          <button type="button" className="btn btn-secondary" onClick={this.next.bind(this)}>OK</button>
+          <button type="button" className="btn btn-secondary" onClick={this.next}>OK</button>
         </div>
       </Wrapper>
     )

@@ -7,28 +7,20 @@ class Game extends React.Component {
   constructor(props) {
     super(props)
 
-    this.state = { history: [], users: props.users, round: 1, action: 0, cards: props.cards }
+    this.state = { history: [], users: props.users, round: 1, action: 0, cards: props.cards, roundCards: 1 }
 
     this.references = []
+
+    this.next = this.next.bind(this)
+    this.undo = this.undo.bind(this)
   }
 
   copy(data) {
     return JSON.parse(JSON.stringify(data))
   }
 
-  undo() {
-    const { history } = this.state
-    const state = history.pop()
-
-    if (state) {
-      this.setState({ history, users: state.users, round: state.round, action: state.action })
-    } else {
-      this.props.undo()
-    }
-  }
-
   next() {
-    let { history, users, round, action, cards } = this.copy(this.state)
+    let { history, users, round, action, cards, roundCards } = this.copy(this.state)
 
     history.push({ users: this.copy(users), round, action })
 
@@ -67,18 +59,27 @@ class Game extends React.Component {
 
     round = action == 0 ? round + 1 : round
 
+    if (round > cards) {
+      roundCards = cards - (round - cards)
+    } else {
+      roundCards = round
+    }
+
     if (round == (cards * 2)) {
       this.props.return(users)
     } else {
-      this.setState({ history, users, round, action })
+      this.setState({ history, users, round, action, roundCards })
     }
   }
 
-  roundCards() {
-    if (this.state.round > this.state.cards) {
-      return this.state.cards - (this.state.round - this.state.cards)
+  undo() {
+    const { history } = this.state
+    const state = history.pop()
+
+    if (state) {
+      this.setState({ history, users: state.users, round: state.round, action: state.action })
     } else {
-      return this.state.round
+      this.props.undo()
     }
   }
 
@@ -93,7 +94,7 @@ class Game extends React.Component {
                 Rodada #{this.state.round}
               </h3>
               <span>
-                Marque as apostas ({this.roundCards.bind(this)()} cartas)
+                Marque as apostas ({this.state.roundCards} cartas)
               </span>
             </div>
             <div className="division list">
@@ -111,8 +112,8 @@ class Game extends React.Component {
               ))}
             </div>
             <div className="division btn-group btn-return">
-              <button type="button" className="btn btn-outline-secondary" onClick={this.undo.bind(this)}>Retornar</button>
-              <button type="button" className="btn btn-secondary" onClick={this.next.bind(this)}>OK</button>
+              <button type="button" className="btn btn-outline-secondary" onClick={this.undo}>Retornar</button>
+              <button type="button" className="btn btn-secondary" onClick={this.next}>OK</button>
             </div>
           </Wrapper>
         )
@@ -129,8 +130,8 @@ class Game extends React.Component {
               </span>
             </div>
             <div className="division btn-group btn-return">
-              <button type="button" className="btn btn-outline-secondary" onClick={this.undo.bind(this)}>Retornar</button>
-              <button type="button" className="btn btn-secondary" onClick={this.next.bind(this)}>OK</button>
+              <button type="button" className="btn btn-outline-secondary" onClick={this.undo}>Retornar</button>
+              <button type="button" className="btn btn-secondary" onClick={this.next}>OK</button>
             </div>
           </Wrapper>
         )
@@ -151,7 +152,7 @@ class Game extends React.Component {
 
                 <div key={user.key}>
                   <span className="list-user">
-                    {user.name}
+                    {user.name} apostou {user.betted}
                   </span>
                   <div className="list-action">
                     <input type="checkbox" className="form-control" ref={(element) => this.references[user.key] = element} />
@@ -161,8 +162,8 @@ class Game extends React.Component {
               ))}
             </div>
             <div className="division btn-group btn-return">
-              <button type="button" className="btn btn-outline-secondary" onClick={this.undo.bind(this)}>Retornar</button>
-              <button type="button" className="btn btn-secondary" onClick={this.next.bind(this)}>OK</button>
+              <button type="button" className="btn btn-outline-secondary" onClick={this.undo}>Retornar</button>
+              <button type="button" className="btn btn-secondary" onClick={this.next}>OK</button>
             </div>
           </Wrapper>
         )
@@ -193,8 +194,8 @@ class Game extends React.Component {
               ))}
             </div>
             <div className="division btn-group btn-return">
-              <button type="button" className="btn btn-outline-secondary" onClick={this.undo.bind(this)}>Retornar</button>
-              <button type="button" className="btn btn-secondary" onClick={this.next.bind(this)}>OK</button>
+              <button type="button" className="btn btn-outline-secondary" onClick={this.undo}>Retornar</button>
+              <button type="button" className="btn btn-secondary" onClick={this.next}>OK</button>
             </div>
           </Wrapper>
         )
