@@ -1,6 +1,7 @@
 import React from "react"
 
 import Wrapper from "./Wrapper"
+import Icon from "./Icon"
 
 class Classification extends React.Component {
 
@@ -36,8 +37,12 @@ class Classification extends React.Component {
             ))}
         </div>
         <div className="division btn-group btn-return">
-          <button type="button" className="btn btn-outline-secondary" onClick={this.props.undo}>Retornar</button>
-          <button type="button" className="btn btn-secondary" onClick={this.props.return}>OK</button>
+          <button type="button" className="btn btn-outline-secondary" onClick={this.props.undo}>
+            <Icon icon="undo" />
+          </button>
+          <button type="button" className="btn btn-secondary" onClick={this.props.return}>
+            <Icon icon="next" />
+          </button>
         </div>
       </Wrapper>
     )

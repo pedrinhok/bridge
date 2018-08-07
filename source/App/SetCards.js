@@ -1,6 +1,7 @@
 import React from "react"
 
 import Wrapper from "./Wrapper"
+import Icon from "./Icon"
 
 class SetCards extends React.Component {
 
@@ -28,8 +29,12 @@ class SetCards extends React.Component {
           <input type="number" className="form-control" defaultValue={this.state.cards} ref={(element) => this.reference = element} />
         </div>
         <div className="division btn-group btn-return">
-          <button type="button" className="btn btn-outline-secondary" onClick={this.props.undo}>Retornar</button>
-          <button type="button" className="btn btn-secondary" onClick={this.next}>OK</button>
+          <button type="button" className="btn btn-outline-secondary" onClick={this.props.undo}>
+            <Icon icon="undo" />
+          </button>
+          <button type="button" className="btn btn-secondary" onClick={this.next}>
+            <Icon icon="next" />
+          </button>
         </div>
       </Wrapper>
     )

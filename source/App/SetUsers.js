@@ -1,6 +1,7 @@
 import React from "react"
 
 import Wrapper from "./Wrapper"
+import Icon from "./Icon"
 
 class SetUsers extends React.Component {
 
@@ -71,7 +72,9 @@ class SetUsers extends React.Component {
           <div className="input-group">
             <input type="text" className="form-control" ref={(element) => this.reference = element} onKeyUp={this.enter} />
             <div className="input-group-append">
-              <button type="button" className="btn btn-outline-secondary" onClick={this.add}>OK</button>
+              <button type="button" className="btn btn-outline-secondary" onClick={this.add}>
+                <Icon icon="add" />
+              </button>
             </div>
           </div>
           <div className="list">
@@ -81,17 +84,23 @@ class SetUsers extends React.Component {
                 <span className="list-user">
                   {user}
                 </span>
-                <span className="list-action">
-                  <button type="button" onClick={() => this.remove(key)}>&times;</button>
-                </span>
+                <div className="list-action">
+                  <button type="button" className="btn btn-icon" onClick={() => this.remove(key)}>
+                    <Icon icon="remove" />
+                  </button>
+                </div>
               </div>
 
             ))}
           </div>
         </div>
         <div className="division btn-group btn-return">
-          <button type="button" className="btn btn-outline-secondary" onClick={this.props.undo}>Retornar</button>
-          <button type="button" className="btn btn-secondary" onClick={this.next}>OK</button>
+          <button type="button" className="btn btn-outline-secondary" onClick={this.props.undo}>
+            <Icon icon="undo" />
+          </button>
+          <button type="button" className="btn btn-secondary" onClick={this.next}>
+            <Icon icon="next" />
+          </button>
         </div>
       </Wrapper>
     )

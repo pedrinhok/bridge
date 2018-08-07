@@ -1,6 +1,7 @@
 import React from "react"
 
 import Wrapper from "./Wrapper"
+import Icon from "./Icon"
 
 class Game extends React.Component {
 
@@ -11,8 +12,31 @@ class Game extends React.Component {
 
     this.references = []
 
+    this.buttons = this.buttons.bind(this)
+    this.check = this.check.bind(this)
     this.next = this.next.bind(this)
     this.undo = this.undo.bind(this)
+  }
+
+  buttons() {
+    return (
+      <div className="division btn-group btn-return">
+        <button type="button" className="btn btn-outline-secondary" onClick={this.undo}>
+          <Icon icon="undo" />
+        </button>
+        <button type="button" className="btn btn-secondary" onClick={this.next}>
+          <Icon icon="next" />
+        </button>
+      </div>
+    )
+  }
+
+  check(key) {
+    const { users } = this.copy(this.state)
+
+    users[key].check = !users[key].check
+
+    this.setState({ users })
   }
 
   copy(data) {
@@ -29,7 +53,7 @@ class Game extends React.Component {
       case 0:
         users = users.map((user) => {
           const element = this.references[user.key]
-          user.betted = element.value
+          user.bet = element.value
           return user
         })
         action = 1
@@ -41,11 +65,11 @@ class Game extends React.Component {
 
       case 2:
         users = users.map((user) => {
-          const element = this.references[user.key]
-          if (element.checked) {
-            user.score = user.score + 10 + +user.betted
+          if (user.check) {
+            user.score = user.score + 10 + +user.bet
           }
-          user.betted = undefined
+          user.check = undefined
+          user.bet = undefined
           return user
         })
         action = 3
@@ -111,10 +135,7 @@ class Game extends React.Component {
 
               ))}
             </div>
-            <div className="division btn-group btn-return">
-              <button type="button" className="btn btn-outline-secondary" onClick={this.undo}>Retornar</button>
-              <button type="button" className="btn btn-secondary" onClick={this.next}>OK</button>
-            </div>
+            {this.buttons()}
           </Wrapper>
         )
 
@@ -129,10 +150,7 @@ class Game extends React.Component {
                 Rodada em andamento...
               </span>
             </div>
-            <div className="division btn-group btn-return">
-              <button type="button" className="btn btn-outline-secondary" onClick={this.undo}>Retornar</button>
-              <button type="button" className="btn btn-secondary" onClick={this.next}>OK</button>
-            </div>
+            {this.buttons()}
           </Wrapper>
         )
 
@@ -152,19 +170,18 @@ class Game extends React.Component {
 
                 <div key={user.key}>
                   <span className="list-user">
-                    {user.name} apostou {user.betted}
+                    {user.name} apostou {user.bet}
                   </span>
                   <div className="list-action">
-                    <input type="checkbox" className="form-control" ref={(element) => this.references[user.key] = element} />
+                    <button type="button" className="btn btn-icon" onClick={() => this.check(user.key)}>
+                      <Icon icon={ user.check ? "check" : "uncheck" } measure="2x" />
+                    </button>
                   </div>
                 </div>
 
               ))}
             </div>
-            <div className="division btn-group btn-return">
-              <button type="button" className="btn btn-outline-secondary" onClick={this.undo}>Retornar</button>
-              <button type="button" className="btn btn-secondary" onClick={this.next}>OK</button>
-            </div>
+            {this.buttons()}
           </Wrapper>
         )
 
@@ -193,10 +210,7 @@ class Game extends React.Component {
 
               ))}
             </div>
-            <div className="division btn-group btn-return">
-              <button type="button" className="btn btn-outline-secondary" onClick={this.undo}>Retornar</button>
-              <button type="button" className="btn btn-secondary" onClick={this.next}>OK</button>
-            </div>
+            {this.buttons()}
           </Wrapper>
         )
 
