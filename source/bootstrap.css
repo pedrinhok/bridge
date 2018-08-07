@@ -34,19 +34,15 @@
 .list > div:first-child {
   border-top: none;
 }
-.list .list-user {
+.list > div > .list-user {
   flex: 1 1 80%;
 }
-.list .list-action {
+.list > div > .list-action {
   flex: 1 1 20%;
   text-align: center;
 }
-.list .list-action input {
+.list > div > .list-action > input {
   text-align: center;
-}
-.list .list-action input[type="checkbox"] {
-  display: initial;
-  width: auto;
 }
 
 .text-center input {
@@ -55,7 +51,7 @@
 
 @media (max-width: 575px) {
 
-  .list .list-action input[type="checkbox"] {
+  .list > div > .list-action input[type="checkbox"] {
     width: 100%;
   }
 

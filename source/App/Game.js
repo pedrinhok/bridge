@@ -55,33 +55,36 @@ class Game extends React.Component {
   next() {
     let { history, users, round, action, cards } = this.copy(this.state)
 
-    history.push({ users: this.copy(users), round, action })
+    let temporary = { round, action }
 
     switch (action) {
 
       case 1:
+        temporary.users = this.copy(users)
         action = 2
       break
 
       case 2:
         users = users.map((user) => {
-          const element = this.references[user.key]
-          user.bet = element.value
+          user.bet = this.references[user.key].value
+          user.check = undefined
           return user
         })
+        temporary.users = this.copy(users)
         action = 3
       break
 
       case 3:
+        temporary.users = this.copy(users)
         action = 4
       break
 
       case 4:
+        temporary.users = this.copy(users)
         users = users.map((user) => {
           if (user.check) {
             user.score = user.score + 10 + +user.bet
           }
-          user.check = undefined
           user.bet = undefined
           return user
         })
@@ -89,10 +92,13 @@ class Game extends React.Component {
       break
 
       case 5:
+        temporary.users = this.copy(users)
         action = 1
       break
 
     }
+
+    history.push(temporary)
 
     round = action == 1 ? round + 1 : round
 
@@ -151,7 +157,7 @@ class Game extends React.Component {
                     {user.name}
                   </span>
                   <div className="list-action">
-                    <input type="number" className="form-control" defaultValue="0" ref={(element) => this.references[user.key] = element} />
+                    <input type="number" className="form-control" defaultValue={user.bet || 0} ref={(element) => this.references[user.key] = element} />
                   </div>
                 </div>
 
