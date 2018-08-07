@@ -8,11 +8,12 @@ class Game extends React.Component {
   constructor(props) {
     super(props)
 
-    this.state = { history: [], users: props.users, round: 1, action: 0, cards: props.cards, roundCards: 1 }
+    this.state = { history: [], users: props.users, round: 1, action: 1, cards: props.cards }
 
     this.references = []
 
     this.buttons = this.buttons.bind(this)
+    this.cards = this.cards.bind(this)
     this.check = this.check.bind(this)
     this.next = this.next.bind(this)
     this.undo = this.undo.bind(this)
@@ -31,6 +32,14 @@ class Game extends React.Component {
     )
   }
 
+  cards() {
+    if (this.state.round > this.state.cards) {
+      return this.state.cards - (this.state.round - this.state.cards)
+    } else {
+      return this.state.round
+    }
+  }
+
   check(key) {
     const { users } = this.copy(this.state)
 
@@ -44,26 +53,30 @@ class Game extends React.Component {
   }
 
   next() {
-    let { history, users, round, action, cards, roundCards } = this.copy(this.state)
+    let { history, users, round, action, cards } = this.copy(this.state)
 
     history.push({ users: this.copy(users), round, action })
 
     switch (action) {
-
-      case 0:
-        users = users.map((user) => {
-          const element = this.references[user.key]
-          user.bet = element.value
-          return user
-        })
-        action = 1
-      break
 
       case 1:
         action = 2
       break
 
       case 2:
+        users = users.map((user) => {
+          const element = this.references[user.key]
+          user.bet = element.value
+          return user
+        })
+        action = 3
+      break
+
+      case 3:
+        action = 4
+      break
+
+      case 4:
         users = users.map((user) => {
           if (user.check) {
             user.score = user.score + 10 + +user.bet
@@ -72,32 +85,26 @@ class Game extends React.Component {
           user.bet = undefined
           return user
         })
-        action = 3
+        action = 5
       break
 
-      case 3:
-        action = 0
+      case 5:
+        action = 1
       break
 
     }
 
-    round = action == 0 ? round + 1 : round
-
-    if (round > cards) {
-      roundCards = cards - (round - cards)
-    } else {
-      roundCards = round
-    }
+    round = action == 1 ? round + 1 : round
 
     if (round == (cards * 2)) {
       this.props.return(users)
     } else {
-      this.setState({ history, users, round, action, roundCards })
+      this.setState({ history, users, round, action })
     }
   }
 
   undo() {
-    const { history } = this.state
+    const { history } = this.copy(this.state)
     const state = history.pop()
 
     if (state) {
@@ -110,7 +117,7 @@ class Game extends React.Component {
   render() {
     switch (this.state.action) {
 
-      case 0:
+      case 1:
         return (
           <Wrapper>
             <div className="division text-center">
@@ -118,7 +125,22 @@ class Game extends React.Component {
                 Rodada #{this.state.round}
               </h3>
               <span>
-                Marque as apostas ({this.state.roundCards} cartas)
+                {this.cards()} { this.cards() == 1 ? "carta" : "cartas" } para cada participante
+              </span>
+            </div>
+            {this.buttons()}
+          </Wrapper>
+        )
+
+      case 2:
+        return (
+          <Wrapper>
+            <div className="division text-center">
+              <h3>
+                Rodada #{this.state.round}
+              </h3>
+              <span>
+                Marque as apostas
               </span>
             </div>
             <div className="division list">
@@ -139,7 +161,7 @@ class Game extends React.Component {
           </Wrapper>
         )
 
-      case 1:
+      case 3:
         return (
           <Wrapper>
             <div className="division text-center">
@@ -154,7 +176,7 @@ class Game extends React.Component {
           </Wrapper>
         )
 
-      case 2:
+      case 4:
         return (
           <Wrapper>
             <div className="division text-center">
@@ -185,7 +207,7 @@ class Game extends React.Component {
           </Wrapper>
         )
 
-      case 3:
+      case 5:
         return (
           <Wrapper>
             <div className="division text-center">

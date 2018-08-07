@@ -11,28 +11,28 @@ class App extends React.Component {
   constructor(props) {
     super(props)
 
-    this.state = { action: 0 }
+    this.state = { action: 1 }
   }
 
   undo() {
     const { action } = this.state
 
-    if (action == 1) {
-      this.setState({ action: 0, users: undefined })
+    if (action == 2) {
+      this.setState({ action: 1, users: undefined })
     } else {
       this.setState({ action: action - 1 })
     }
   }
 
-  returnWelcome() { this.setState({ action: 1 }) }
+  returnWelcome() { this.setState({ action: 2 }) }
 
-  returnSetUsers(users) { this.setState({ action: 2, users }) }
+  returnSetUsers(users) { this.setState({ action: 3, users }) }
 
-  returnSetCards(cards) { this.setState({ action: 3, cards }) }
+  returnSetCards(cards) { this.setState({ action: 4, cards }) }
 
-  returnGame(users) { this.setState({ action: 4, users }) }
+  returnGame(users) { this.setState({ action: 5, users }) }
 
-  returnClassification() { this.setState({ action: 0, users: undefined }) }
+  returnClassification() { this.setState({ action: 1, users: undefined }) }
 
   renderWelcome() {
     return <Welcome return={this.returnWelcome.bind(this)} />
@@ -56,15 +56,15 @@ class App extends React.Component {
 
   render() {
     switch (this.state.action) {
-      case 0:
-        return this.renderWelcome()
       case 1:
-        return this.renderSetUsers()
+        return this.renderWelcome()
       case 2:
-        return this.renderSetCards()
+        return this.renderSetUsers()
       case 3:
-        return this.renderGame()
+        return this.renderSetCards()
       case 4:
+        return this.renderGame()
+      case 5:
         return this.renderClassification()
       default:
         return this.renderWelcome()
