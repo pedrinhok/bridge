@@ -35,14 +35,25 @@
   border-top: none;
 }
 .list > div > .list-user {
-  flex: 1 1 80%;
+  flex: 1 1;
 }
 .list > div > .list-action {
-  flex: 1 1 20%;
+  flex: 0;
+  display: flex;
+}
+.list > div > .list-user-with-input {
+  flex: 1 1 50%;
+}
+.list > div > .list-action-with-input {
+  flex: 1 1 50%;
+  display: flex;
+}
+.list > div > .list-action-with-input > input {
+  flex: 1 1 50%;
   text-align: center;
 }
-.list > div > .list-action > input {
-  text-align: center;
+.list > div > .list-action-with-input > button {
+  flex: 0;
 }
 
 .text-center input {

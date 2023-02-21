@@ -65,11 +65,18 @@ class Game extends React.Component {
       break
 
       case 2:
+        let bets = 0
         users = users.map((user) => {
-          user.bet = this.references[user.key].value
-          user.check = undefined
+          const bet = parseInt(this.references[user.key].value)
+          bets += parseInt(bet)
+          user.bet = bet
+          user.check = true
           return user
         })
+        if (bets == this.cards()) {
+          window.alert("Quantidade de apostas inválidas")
+          return
+        }
         temporary.users = this.copy(users)
         action = 3
       break
@@ -81,13 +88,19 @@ class Game extends React.Component {
 
       case 4:
         temporary.users = this.copy(users)
+        let checks = 0
         users = users.map((user) => {
           if (user.check) {
+            checks++
             user.score = user.score + 10 + +user.bet
           }
           user.bet = undefined
           return user
         })
+        if (checks == users.length) {
+          window.alert("Alguém tem que se fuder")
+          return
+        }
         action = 5
       break
 
@@ -153,11 +166,21 @@ class Game extends React.Component {
               {this.state.users.map((user) => (
 
                 <div key={user.key}>
-                  <span className="list-user">
+                  <span className="list-user-with-input">
                     {user.name}
                   </span>
-                  <div className="list-action">
+                  <div className="list-action-with-input">
                     <input type="number" className="form-control" defaultValue={user.bet || 0} ref={(element) => this.references[user.key] = element} />
+                    <button type="button" className="btn btn-icon"
+                      onClick={() => this.references[user.key].value = parseInt(this.references[user.key].value) + 1}
+                    >
+                      <Icon icon="add" />
+                    </button>
+                    <button type="button" className="btn btn-icon"
+                      onClick={() => this.references[user.key].value = parseInt(this.references[user.key].value) - 1}
+                    >
+                      <Icon icon="minus" />
+                    </button>
                   </div>
                 </div>
 
@@ -214,6 +237,7 @@ class Game extends React.Component {
         )
 
       case 5:
+        const sortedUsers = this.copy(this.state.users).sort((a, b) => a.score >= b.score ? -1 : 1)
         return (
           <Wrapper>
             <div className="division text-center">
@@ -225,8 +249,7 @@ class Game extends React.Component {
               </span>
             </div>
             <div className="division list">
-              {this.state.users.map((user) => (
-
+              {sortedUsers.map((user) => (
                 <div key={user.key}>
                   <span className="list-user">
                     {user.name}
@@ -235,7 +258,6 @@ class Game extends React.Component {
                     {user.score}
                   </span>
                 </div>
-
               ))}
             </div>
             {this.buttons()}

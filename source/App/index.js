@@ -14,6 +14,15 @@ class App extends React.Component {
     this.state = { action: 1 }
   }
 
+  componentDidMount() {
+    window.addEventListener("beforeunload", this.componentCleanup.bind(this))
+  }
+
+  componentCleanup(event) {
+    event.preventDefault()
+    event.returnValue = ""
+  }
+
   undo() {
     const { action } = this.state
 
