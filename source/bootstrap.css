@@ -1,3 +1,7 @@
+body {
+  overscroll-behavior: none;
+}
+
 .btn-icon {
   background: inherit;
   border: none;
